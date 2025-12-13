@@ -10,17 +10,17 @@
         body {
             font-family: 'PlemolJP', 'メイリオ', monospace;
             margin: 0;
-            background-color: #f4f4f4;
-            color: #333;
+            background-color: #343238;
+            color: #ffffff;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
         }
         .container {
-            background-color: #fff;
+            background-color: #292424;
             padding: 25px;
             border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(255, 0, 0, 0.1);
             /* ここを修正：max-width を削除し、width: 100% に変更 */
             width: 100%; /* 画面の横幅全体を使う */
             /* margin: 20px auto; は上下のマージンとして残し、左右中央揃えを解除 */
@@ -37,14 +37,14 @@
         }
         h1 {
             text-align: center;
-            color: #0056b3;
+            color: #ffe600;
             margin-bottom: 30px;
         }
         label {
             display: block;
             margin-bottom: 8px;
             font-weight: bold;
-            color: #555;
+            color: #e5ff00;
         }
 
         .editor-container {
@@ -52,27 +52,60 @@
             gap: 20px;
             flex-grow: 1;
             margin-bottom: 20px;
+            overflow: visible; /* 疑似要素のボーダーが切れないように */
         }
 
         .editor-block {
             display: flex;
             flex-direction: column;
             flex: 1;
+            box-sizing: border-box;
+        }
+
+        /* 右側のボックス（出力）の端が切れる問題に対応 */
+        .editor-block:last-child {
+            padding-right: 6px; /* 右側に余白を与えてボーダーを見えるようにする */
         }
 
         .code-input-wrapper {
             display: flex;
             flex-grow: 1;
-            border: 1px solid #ccc;
+            position: relative;
             border-radius: 6px;
-            overflow: hidden;
+            overflow: visible;
+        }
+
+        /* 汎用の虹色ボーダークラス（内側の背景色は --inner-bg で指定） */
+        .rainbow-border {
+            position: relative;
+            border: 3px solid transparent;
+            border-radius: 6px;
+            background-image: linear-gradient(var(--inner-bg, #292727), var(--inner-bg, #292727)), linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #00ffff, #0000ff, #8b00ff, #ff0000);
+            background-origin: padding-box, border-box;
+            background-clip: padding-box, border-box;
+            background-size: auto, 200% 100%;
+            animation: rainbow-flow 3s linear infinite;
+        }
+
+        /* テキストエリア類を前面に出す */
+        .rainbow-border textarea,
+        .rainbow-border .line-numbers {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* （直前の変更を元に戻しました：幅制約は解除） */
+
+        @keyframes rainbow-flow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
         }
 
         .line-numbers {
             width: 40px;
             padding: 12px 5px;
-            background-color: #eee;
-            color: #777;
+            background-color: #3b3939;
+            color: #dadada;
             text-align: right;
             font-family: 'Courier New', Courier, monospace;
             font-size: 14px;
@@ -89,8 +122,8 @@
             min-height: 300px; /* 最小の高さを設定 */
             flex-grow: 1;
             padding: 12px;
-            background-color: #fcfcfc;
-            color: #333;
+            background-color: #292727;
+            color: #ffffff;
             font-family: 'Courier New', Courier, monospace;
             font-size: 14px;
             line-height: 1.5;
@@ -104,30 +137,30 @@
             min-height: 300px; /* 最小の高さを設定 */
             flex-grow: 1;
             padding: 12px;
-            background-color: #fcfcfc;
-            color: #333;
+            background-color: #413f3f;
+            --inner-bg: #413f3f;
+            color: #e0e0e0;
             font-family: 'Courier New', Courier, monospace;
             font-size: 14px;
             line-height: 1.5;
             resize: none;
-            border: 1px solid #ccc;
             border-radius: 6px;
             box-sizing: border-box;
             overflow-y: auto;
         }
 
         #outputArea.error-state {
-            background-color: #ffe0e0;
-            border-color: #d9534f;
-            color: #d9534f;
+            background-color: #3b3939;
+            --inner-bg: #3b3939;
+            color: #ff0000;
         }
 
         button {
             display: block;
             width: 100%;
             padding: 12px;
-            background-color: #007bff;
-            color: white;
+            background-color: #363738;
+            color: rgb(233, 231, 231);
             border: none;
             border-radius: 6px;
             font-size: 17px;
@@ -147,9 +180,9 @@
             margin-top: 20px;
             margin-bottom: 20px;
             padding: 10px;
-            border: 1px solid #eee;
             border-radius: 6px;
-            background-color: #f9f9f9;
+            background-color: #3b3939;
+            --inner-bg: #3b3939;
         }
         .option-group label {
             display: inline-block;
@@ -159,6 +192,49 @@
         }
         .option-group input[type="radio"] {
             margin-right: 5px;
+        }
+
+        /* Footer styling: 中央寄せ、前面に出す */
+        footer {
+            text-align: center;
+            position: relative;
+            z-index: 3;
+            color: #e0e0e0;
+            padding: 12px 0 20px;
+        }
+
+        footer a { color: #9fd1ff; }
+
+        /* 小さなBGMオン/オフトグル（目立たない場所に表示） */
+        .music-toggle {
+            position: fixed;
+            right: 12px;
+            bottom: 12px;
+            z-index: 10000;
+        }
+        .music-toggle button {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(41,36,36,0.85);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+            backdrop-filter: blur(4px);
+        }
+        .music-toggle button.on {
+            background: linear-gradient(180deg,#48c774,#2ecc71);
+            color: #062;
+            box-shadow: 0 4px 10px rgba(46,204,113,0.25);
+        }
+        .music-toggle button.off {
+            background: rgba(41,36,36,0.85);
+            color: #fff;
         }
     </style>
 </head>
@@ -188,7 +264,7 @@
         <div class="editor-container">
             <div class="editor-block">
                 <label for="assemblyCode">ソースコード</label>
-                <div class="code-input-wrapper">
+                <div class="code-input-wrapper rainbow-border">
                     <textarea class="line-numbers" readonly></textarea>
                     <textarea id="assemblyCode" placeholder="0x1000 ; myCode&#10;ret"></textarea>
                 </div>
@@ -196,11 +272,11 @@
 
             <div class="editor-block">
                 <label for="outputArea">結果 / エラー:</label>
-                <textarea id="outputArea" readonly></textarea>
+                <textarea id="outputArea" readonly class="rainbow-border"></textarea>
             </div>
         </div>
 
-        <div class="option-group">
+        <div class="option-group rainbow-border">
             <strong>出力形式を選択:</strong>
             <div>
                 <input type="radio" id="formatIPS" name="outputFormat" value="ips" checked>
@@ -227,8 +303,17 @@
             </a>
             ライブラリ（BSD-3-Clauseライセンス）を利用しています。
         </p>
-        <p class="footer-copy">&copy; 2025 @KAIN. All rights reserved.</p>
+        <p class="footer-copy">&copy; 2025 @KAIN. All rights reserved.
+            Discord:@yml_xyz
+        </p>
     </footer>
+
+    <!-- BGM オーディオ（自動再生する決まった曲を再生） -->
+    <audio id="bgm" loop preload="auto"></audio>
+    <!-- 小さなオン/オフ切替ボタン -->
+    <div class="music-toggle">
+        <button id="bgmToggle" aria-pressed="false" title="BGM ON/OFF">♪</button>
+    </div>
 
     <script>
 
@@ -371,6 +456,66 @@
                 console.error("エラー: 'convertButton' IDのボタンが見つかりません。");
             }
         });
+
+        // --- Simple autoplay + small toggle ---
+        (function(){
+            const bgm = document.getElementById('bgm');
+            const toggle = document.getElementById('bgmToggle');
+
+            // 既定の曲を設定（リポジトリに `assets/bgmusic.mp3` を置いてください）
+            bgm.src = 'assets/bgmusic.mp3';
+
+            // 再生を試みる（ブラウザポリシーでブロックされる場合あり）
+            function tryAutoplay(){
+                bgm.play().then(()=>{
+                    // 再生成功 -> ON 表示（音符）
+                    toggle.textContent = '♪';
+                    toggle.classList.add('on');
+                    toggle.classList.remove('off');
+                    toggle.setAttribute('aria-pressed','true');
+                    toggle.title = 'BGM: ON (クリックでOFF)';
+                }).catch(()=>{
+                    // ブロックされた場合は停止扱い（✖ 表示）
+                    toggle.textContent = '✖';
+                    toggle.classList.add('off');
+                    toggle.classList.remove('on');
+                    toggle.setAttribute('aria-pressed','false');
+                    toggle.title = 'BGM: OFF (クリックでON)';
+                });
+            }
+
+            // ページ読み込み時に自動で再生を試みる
+            tryAutoplay();
+
+            // または、ユーザーの最初の操作で再生を開始（フォールバック）
+            function userGestureStart(){
+                tryAutoplay();
+                window.removeEventListener('click', userGestureStart);
+                window.removeEventListener('keydown', userGestureStart);
+            }
+            window.addEventListener('click', userGestureStart, { once: true });
+            window.addEventListener('keydown', userGestureStart, { once: true });
+
+            // トグルでオン/オフ（見た目：再生->♪ , 停止->✖）
+            toggle.addEventListener('click', () => {
+                if (bgm.paused) {
+                    bgm.play().then(()=>{
+                        toggle.textContent = '♪';
+                        toggle.classList.add('on');
+                        toggle.classList.remove('off');
+                        toggle.setAttribute('aria-pressed','true');
+                        toggle.title = 'BGM: ON (クリックでOFF)';
+                    }).catch(()=>{});
+                } else {
+                    bgm.pause();
+                    toggle.textContent = '✖';
+                    toggle.classList.add('off');
+                    toggle.classList.remove('on');
+                    toggle.setAttribute('aria-pressed','false');
+                    toggle.title = 'BGM: OFF (クリックでON)';
+                }
+            });
+        })();
 
         function assembleCode() {
             const assemblyCode = document.getElementById('assemblyCode').value;
