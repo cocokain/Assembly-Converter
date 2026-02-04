@@ -3,4 +3,4 @@
 
 
 # Lisence
-KeyStoneJS [KeyStone]([https://github.com/AlexAltea/keystone.js?tab=BSD-3-Clause-1-ov-file])
+KeyStoneJS [KeyStone](https://github.com/AlexAltea/keystone.js?tab=BSD-3-Clause-1-ov-file)
